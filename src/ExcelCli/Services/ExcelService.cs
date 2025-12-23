@@ -57,6 +57,12 @@ public class ExcelService : IExcelService
         var worksheet = GetWorksheet(workbook, sheetName);
         var cell = worksheet.Cell(cellAddress);
         
+        // If cell has a formula, return the formula; otherwise return the value
+        if (cell.HasFormula)
+        {
+            return await Task.FromResult("=" + cell.FormulaA1);
+        }
+        
         return await Task.FromResult(cell.GetValue<string>());
     }
 
@@ -309,6 +315,18 @@ public class ExcelService : IExcelService
         workbook.Save();
         
         await Task.CompletedTask;
+    }
+
+    public async Task<string> GetCellValueAsync(string filePath, string sheetName, string cellAddress)
+    {
+        ValidateFilePath(filePath);
+        
+        using var workbook = new XLWorkbook(filePath);
+        var worksheet = GetWorksheet(workbook, sheetName);
+        var cell = worksheet.Cell(cellAddress);
+        
+        // Always return the evaluated/calculated value, never the formula
+        return await Task.FromResult(cell.GetValue<string>());
     }
 
     private void ValidateFilePath(string filePath)

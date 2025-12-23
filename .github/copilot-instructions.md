@@ -87,12 +87,21 @@ excel-cli list-sheets -p data.xlsx
 ```
 
 ### read-cell
-Read the value of a specific cell.
+Read the content of a specific cell. If the cell contains a formula, returns the formula itself (e.g., "=SUM(A1:B1)"). If the cell contains a value, returns that value.
 
 ```bash
 excel-cli read-cell --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
 excel-cli read-cell -p data.xlsx -s "Sheet1" -c A1
 excel-cli read-cell --path data.xlsx --sheet "Data" --cell B5
+```
+
+### read-cell-value
+Read the evaluated value from a cell. If the cell contains a formula, returns the calculated result, NOT the formula. This is useful when you need the actual computed value.
+
+```bash
+excel-cli read-cell-value --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
+excel-cli read-cell-value -p data.xlsx -s "Sheet1" -c C1
+excel-cli read-cell-value --path data.xlsx --sheet "Data" --cell D5
 ```
 
 ### read-range

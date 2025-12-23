@@ -4,7 +4,7 @@ A powerful command-line tool for reading and modifying Excel files using ClosedX
 
 ## Features
 
-- 📖 **Read Operations**: Read file info, list sheets, read cells and ranges
+- 📖 **Read Operations**: Read file info, list sheets, read cells (formula or value), get evaluated cell values, read ranges
 - ✏️ **Write Operations**: Write to cells, insert formulas
 - 📋 **Sheet Management**: Create, delete, rename, and copy worksheets
 - 🔍 **Search**: Find values in worksheets
@@ -78,9 +78,18 @@ excel-cli read-file --path data.xlsx
 excel-cli list-sheets --path data.xlsx
 ```
 
-**read-cell** - Read a specific cell value
+**read-cell** - Read a specific cell (returns formula if present, otherwise value)
 ```bash
 excel-cli read-cell --path data.xlsx --sheet "Sheet1" --cell A1
+# If cell A1 contains "=SUM(B1:B5)", this returns "=SUM(B1:B5)"
+# If cell A1 contains "Hello", this returns "Hello"
+```
+
+**read-cell-value** - Read the evaluated value from a cell (calculated result for formulas)
+```bash
+excel-cli read-cell-value --path data.xlsx --sheet "Sheet1" --cell A1
+# If cell A1 contains "=SUM(B1:B5)", this returns the calculated sum (e.g., "150")
+# If cell A1 contains "Hello", this returns "Hello"
 ```
 
 **read-range** - Read a range of cells

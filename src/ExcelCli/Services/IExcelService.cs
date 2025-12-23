@@ -76,5 +76,10 @@ public interface IExcelService
     /// Insert a formula into a cell
     /// </summary>
     Task InsertFormulaAsync(string filePath, string sheetName, string cellAddress, string formula);
+
+    /// <summary>
+    /// Get the evaluated value from a cell (if cell contains a formula, returns the calculated result)
+    /// </summary>
+    Task<string> GetCellValueAsync(string filePath, string sheetName, string cellAddress);
 }
 
