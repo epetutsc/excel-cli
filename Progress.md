@@ -44,10 +44,36 @@
   - Successfully packed as NuGet package (ExcelCli.1.0.0.nupkg)
   - Verified tool installation and functionality
   - All 109 tests still passing
+✅ **New get-cell-value Command (2024-12-23):**
+  - Added new `get-cell-value` command to get evaluated cell values
+  - Modified `read-cell` command to return formulas when present
+  - Key distinction:
+    - `read-cell`: Returns formula if cell contains formula (e.g., "=SUM(A1:A3)"), otherwise returns value
+    - `get-cell-value`: Always returns evaluated/calculated value (e.g., "60")
+  - Added `GetCellValueAsync` method to IExcelService and ExcelService
+  - Created `GetCellValueCommand` class
+  - Updated Program.cs to register new command
+  - Added 12 new tests for GetCellValueAsync functionality
+  - Added 4 new tests for ReadCellAsync formula behavior
+  - Updated FormulaTests to reflect new behavior
+  - Updated README.md and copilot-instructions.md with command documentation
+  - All 125 tests passing (16 tests added)
+  - Manually verified both commands work correctly with formulas and values
 
 ## Summary
 
 The Excel CLI project is now fully functional as a .NET global tool with comprehensive test coverage.
+
+### Recent Changes (New get-cell-value Command - 2024-12-23)
+- **New Command**: `get-cell-value` returns evaluated cell values (calculated result for formulas)
+- **Updated Command**: `read-cell` now returns the formula when present, otherwise returns the value
+- **Use Cases**:
+  - Use `read-cell` when you want to see the formula in a cell
+  - Use `get-cell-value` when you need the calculated/evaluated result
+- **Example**:
+  - Cell C1 contains `=A1+B1` where A1=10, B1=5
+  - `read-cell` returns: "=A1+B1"
+  - `get-cell-value` returns: "15"
 
 ### Recent Changes (Converted to Dotnet Tool - 2024-12-23)
 - **Dotnet Tool Configuration**: Added tool packaging to ExcelCli.csproj
@@ -65,10 +91,10 @@ The Excel CLI project is now fully functional as a .NET global tool with compreh
   - Installed as global tool and verified `excel-cli` command works
   - All 109 tests still passing after changes
 
-### Commands Implemented (13 total)
-1. read-file, 2. list-sheets, 3. read-cell, 4. read-range, 5. write-cell,
-6. create-sheet, 7. delete-sheet, 8. rename-sheet, 9. copy-sheet,
-10. find-value, 11. insert-formula, 12. export-sheet, 13. import-data
+### Commands Implemented (14 total)
+1. read-file, 2. list-sheets, 3. read-cell, 4. **get-cell-value**, 5. read-range, 
+6. write-cell, 7. create-sheet, 8. delete-sheet, 9. rename-sheet, 10. copy-sheet,
+11. find-value, 12. insert-formula, 13. export-sheet, 14. import-data
 
 ### Technical Details
 - .NET 10.0
@@ -83,15 +109,17 @@ The Excel CLI project is now fully functional as a .NET global tool with compreh
 - **Packaged as .NET Global Tool**: Can be installed with `dotnet tool install`
 
 ### File Structure
-- 13 separate command files in Commands/
+- 14 separate command files in Commands/
 - 3 separate record files in Services/
 - Each class in its own file per requirements
-- 15 separate test files (109 total tests)
+- 16 separate test files (125 total tests)
 - NuGet package created in nupkg/ directory
 
 ### Test Coverage
-- ExcelService: 92.2% line coverage (exceeds 90% requirement)
-- 109 tests covering all ExcelService operations
+- ExcelService: >90% line coverage (exceeds 90% requirement)
+- 125 tests covering all ExcelService operations
 - Tests validate success cases, error cases, and edge cases
 - Formula tests validate read/write/calculate operations
+- GetCellValue tests validate evaluated value retrieval
+- ReadCell tests validate formula vs value behavior
 - MockFileSystem enables testing without disk I/O
