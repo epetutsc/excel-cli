@@ -191,11 +191,8 @@ public class ExcelService : IExcelService
         
         using (targetWorkbook)
         {
-            var copiedSheet = sourceWorksheet.CopyTo(targetWorkbook);
-            if (!string.IsNullOrEmpty(newName))
-            {
-                copiedSheet.Name = newName;
-            }
+            var targetSheetName = !string.IsNullOrEmpty(newName) ? newName : sheetName;
+            sourceWorksheet.CopyTo(targetWorkbook, targetSheetName);
             
             targetWorkbook.SaveAs(targetFile);
         }
