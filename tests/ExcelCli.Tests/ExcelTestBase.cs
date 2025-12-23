@@ -152,7 +152,9 @@ public abstract class ExcelTestBase : IDisposable
             }
             catch
             {
-                // Ignore cleanup errors in tests
+                // Safe to ignore cleanup errors: test directories are in temp folder
+                // and will be cleaned up by OS eventually. File locks from parallel
+                // tests may prevent immediate deletion.
             }
             _disposed = true;
         }
