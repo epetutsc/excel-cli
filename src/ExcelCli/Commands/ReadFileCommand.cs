@@ -10,11 +10,15 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class ReadFileCommand : Command
 {
-    public ReadFileCommand(IExcelService excelService, ILogger logger) : base("read-file", "Read and display information about an Excel file")
+    public ReadFileCommand(IExcelService excelService, ILogger logger) : base("read-file", 
+        "Read and display comprehensive information about an Excel file (.xlsx format). " +
+        "Shows file metadata (name, size, last modified date), total number of sheets, and details for each sheet (name, row count, column count). " +
+        "This is a read-only operation that does not modify the file. " +
+        "Example: excel-cli read-file --path data.xlsx")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute (e.g., /home/user/data.xlsx) or relative (e.g., ./data.xlsx, data.xlsx). The file must exist and be readable.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 

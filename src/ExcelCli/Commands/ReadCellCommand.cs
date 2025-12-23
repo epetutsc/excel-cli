@@ -10,23 +10,27 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class ReadCellCommand : Command
 {
-    public ReadCellCommand(IExcelService excelService, ILogger logger) : base("read-cell", "Read the value of a specific cell")
+    public ReadCellCommand(IExcelService excelService, ILogger logger) : base("read-cell", 
+        "Read and display the value of a specific cell from a worksheet. " +
+        "Cell addresses use Excel's A1 notation where letters represent columns (A, B, C, ..., Z, AA, AB, ...) and numbers represent rows (1, 2, 3, ...). " +
+        "This is a read-only operation that does not modify the file. " +
+        "Examples: excel-cli read-cell --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli read-cell -p data.xlsx -s Data -c B5")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute or relative. The file must exist.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 
         var sheetOption = new Option<string>(
             name: "--sheet",
-            description: "Sheet name");
+            description: "Name of the worksheet to read from. Sheet names are case-sensitive and must match exactly.");
         sheetOption.AddAlias("-s");
         sheetOption.IsRequired = true;
 
         var cellOption = new Option<string>(
             name: "--cell",
-            description: "Cell address (e.g., A1)");
+            description: "Cell address in A1 notation (e.g., A1, B5, Z100, AA1). Column letters are case-insensitive.");
         cellOption.AddAlias("-c");
         cellOption.IsRequired = true;
 

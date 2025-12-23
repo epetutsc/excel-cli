@@ -10,29 +10,34 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class WriteCellCommand : Command
 {
-    public WriteCellCommand(IExcelService excelService, ILogger logger) : base("write-cell", "Write a value to a specific cell")
+    public WriteCellCommand(IExcelService excelService, ILogger logger) : base("write-cell", 
+        "Write a value to a specific cell in a worksheet. " +
+        "This command MODIFIES the Excel file. The file and sheet must already exist. " +
+        "Cell addresses use Excel's A1 notation. The value is written as text/string. " +
+        "For formulas, use the 'insert-formula' command instead. " +
+        "Examples: excel-cli write-cell -p data.xlsx -s Sheet1 -c A1 -v Hello | excel-cli write-cell --path data.xlsx --sheet Data --cell B5 --value 42")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute or relative. The file must exist and be writable.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 
         var sheetOption = new Option<string>(
             name: "--sheet",
-            description: "Sheet name");
+            description: "Name of the worksheet to write to. Sheet must already exist. Sheet names are case-sensitive.");
         sheetOption.AddAlias("-s");
         sheetOption.IsRequired = true;
 
         var cellOption = new Option<string>(
             name: "--cell",
-            description: "Cell address (e.g., A1)");
+            description: "Cell address in A1 notation (e.g., A1, B5, Z100). Column letters are case-insensitive.");
         cellOption.AddAlias("-c");
         cellOption.IsRequired = true;
 
         var valueOption = new Option<string>(
             name: "--value",
-            description: "Value to write");
+            description: "Value to write to the cell. Written as text/string. Use 'insert-formula' command for Excel formulas.");
         valueOption.AddAlias("-v");
         valueOption.IsRequired = true;
 

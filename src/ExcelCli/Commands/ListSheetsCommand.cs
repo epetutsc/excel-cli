@@ -10,11 +10,15 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class ListSheetsCommand : Command
 {
-    public ListSheetsCommand(IExcelService excelService, ILogger logger) : base("list-sheets", "List all worksheets in an Excel file")
+    public ListSheetsCommand(IExcelService excelService, ILogger logger) : base("list-sheets", 
+        "List all worksheets in an Excel file (.xlsx format). " +
+        "Displays the name, row count, and column count for each worksheet. " +
+        "This is a read-only operation that does not modify the file. " +
+        "Example: excel-cli list-sheets --path data.xlsx")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute or relative. The file must exist.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 
