@@ -2,6 +2,25 @@
 
 CLI tool for reading and modifying Excel files using ClosedXML.  Run commands with `dotnet run -- <command>`.
 
+## Project Setup Requirements
+
+### Sonar Analyzer
+Every project in this solution **MUST** have the SonarAnalyzer.CSharp NuGet package installed for code quality analysis.
+
+```bash
+dotnet add package SonarAnalyzer.CSharp
+```
+
+### Solution Format
+This project uses the **slnx** solution format (XML-based solution file). If you have an existing .sln file, migrate it using:
+
+```bash
+dotnet sln migrate
+```
+
+### Progress Tracking
+After each significant change, progress **MUST** be tracked in the `Progress.md` file. This file should be kept concise to provide a quick overview and allow work to be continued at any time. Update Progress.md after completing each task or milestone.
+
 ## General Information
 
 This tool uses ClosedXML for Excel file operations and supports . xlsx format.  All file paths should be valid and accessible.
