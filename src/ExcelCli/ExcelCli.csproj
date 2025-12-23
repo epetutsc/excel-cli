@@ -6,6 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    
+    <!-- Dotnet Tool Configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>excel-cli</ToolCommandName>
+    <PackageId>ExcelCli</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>epetutsc</Authors>
+    <Description>A powerful command-line tool for reading and modifying Excel files using ClosedXML</Description>
+    <PackageTags>excel;cli;xlsx;closedxml;tool</PackageTags>
+    <RepositoryUrl>https://github.com/epetutsc/excel-cli</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/epetutsc/excel-cli</PackageProjectUrl>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,23 @@
 # Excel CLI - Terminal Usage
 
-CLI tool for reading and modifying Excel files using ClosedXML.  Run commands with `dotnet run -- <command>`.
+CLI tool for reading and modifying Excel files using ClosedXML. This tool is packaged as a .NET global tool.
+
+## Installation
+
+Install the tool globally:
+```bash
+dotnet tool install --global ExcelCli
+```
+
+Run commands with:
+```bash
+excel-cli <command> [options]
+```
+
+For development, you can also run without installing:
+```bash
+dotnet run --project src/ExcelCli/ExcelCli.csproj -- <command> [options]
+```
 
 ## Project Setup Requirements
 
@@ -56,141 +73,141 @@ All commands work with Excel files (. xlsx format). Use absolute or relative pat
 Read and display information about an Excel file. 
 
 ```bash
-dotnet run -- read-file --path <FILE_PATH>
-dotnet run -- read-file -p data.xlsx
-dotnet run -- read-file --path reports/report.xlsx --sheet "Sheet1"
+excel-cli read-file --path <FILE_PATH>
+excel-cli read-file -p data.xlsx
+excel-cli read-file --path reports/report.xlsx --sheet "Sheet1"
 ```
 
 ### list-sheets
 List all worksheets in an Excel file.
 
 ```bash
-dotnet run -- list-sheets --path <FILE_PATH>
-dotnet run -- list-sheets -p data.xlsx
+excel-cli list-sheets --path <FILE_PATH>
+excel-cli list-sheets -p data.xlsx
 ```
 
 ### read-cell
 Read the value of a specific cell.
 
 ```bash
-dotnet run -- read-cell --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
-dotnet run -- read-cell -p data.xlsx -s "Sheet1" -c A1
-dotnet run -- read-cell --path data.xlsx --sheet "Data" --cell B5
+excel-cli read-cell --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
+excel-cli read-cell -p data.xlsx -s "Sheet1" -c A1
+excel-cli read-cell --path data.xlsx --sheet "Data" --cell B5
 ```
 
 ### read-range
 Read a range of cells from a worksheet.
 
 ```bash
-dotnet run -- read-range --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE>
-dotnet run -- read-range -p data.xlsx -s "Sheet1" -r A1:D10
-dotnet run -- read-range --path data.xlsx --sheet "Data" --range A1:Z100 --format csv
+excel-cli read-range --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE>
+excel-cli read-range -p data.xlsx -s "Sheet1" -r A1:D10
+excel-cli read-range --path data.xlsx --sheet "Data" --range A1:Z100 --format csv
 ```
 
 ### write-cell
 Write a value to a specific cell.
 
 ```bash
-dotnet run -- write-cell --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS> --value <VALUE>
-dotnet run -- write-cell -p data.xlsx -s "Sheet1" -c A1 -v "Hello"
-dotnet run -- write-cell --path data.xlsx --sheet "Data" --cell B5 --value 42
+excel-cli write-cell --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS> --value <VALUE>
+excel-cli write-cell -p data.xlsx -s "Sheet1" -c A1 -v "Hello"
+excel-cli write-cell --path data.xlsx --sheet "Data" --cell B5 --value 42
 ```
 
 ### write-range
 Write multiple values to a range of cells. 
 
 ```bash
-dotnet run -- write-range --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --data <DATA>
-dotnet run -- write-range -p data.xlsx -s "Sheet1" -r A1:B2 -d "[[1,2],[3,4]]"
-dotnet run -- write-range --path data.xlsx --sheet "Data" --range A1:C1 --data-file values.json
+excel-cli write-range --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --data <DATA>
+excel-cli write-range -p data.xlsx -s "Sheet1" -r A1:B2 -d "[[1,2],[3,4]]"
+excel-cli write-range --path data.xlsx --sheet "Data" --range A1:C1 --data-file values.json
 ```
 
 ### create-sheet
 Create a new worksheet in an Excel file.
 
 ```bash
-dotnet run -- create-sheet --path <FILE_PATH> --name <SHEET_NAME>
-dotnet run -- create-sheet -p data.xlsx -n "NewSheet"
-dotnet run -- create-sheet --path data.xlsx --name "Report2025"
+excel-cli create-sheet --path <FILE_PATH> --name <SHEET_NAME>
+excel-cli create-sheet -p data.xlsx -n "NewSheet"
+excel-cli create-sheet --path data.xlsx --name "Report2025"
 ```
 
 ### delete-sheet
 Delete a worksheet from an Excel file.
 
 ```bash
-dotnet run -- delete-sheet --path <FILE_PATH> --name <SHEET_NAME>
-dotnet run -- delete-sheet -p data.xlsx -n "OldSheet"
+excel-cli delete-sheet --path <FILE_PATH> --name <SHEET_NAME>
+excel-cli delete-sheet -p data.xlsx -n "OldSheet"
 ```
 
 ### rename-sheet
 Rename an existing worksheet.
 
 ```bash
-dotnet run -- rename-sheet --path <FILE_PATH> --old-name <OLD_NAME> --new-name <NEW_NAME>
-dotnet run -- rename-sheet -p data.xlsx -o "Sheet1" -n "Data2025"
+excel-cli rename-sheet --path <FILE_PATH> --old-name <OLD_NAME> --new-name <NEW_NAME>
+excel-cli rename-sheet -p data.xlsx -o "Sheet1" -n "Data2025"
 ```
 
 ### copy-sheet
 Copy a worksheet within the same file or to another file.
 
 ```bash
-dotnet run -- copy-sheet --source <SOURCE_FILE> --sheet <SHEET_NAME> --target <TARGET_FILE>
-dotnet run -- copy-sheet -s data.xlsx -sh "Sheet1" -t backup.xlsx
-dotnet run -- copy-sheet --source data.xlsx --sheet "Template" --target report.xlsx --new-name "January"
+excel-cli copy-sheet --source <SOURCE_FILE> --sheet <SHEET_NAME> --target <TARGET_FILE>
+excel-cli copy-sheet -s data.xlsx -sh "Sheet1" -t backup.xlsx
+excel-cli copy-sheet --source data.xlsx --sheet "Template" --target report.xlsx --new-name "January"
 ```
 
 ### format-cells
 Apply formatting to cells (font, color, borders, etc.).
 
 ```bash
-dotnet run -- format-cells --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --style <STYLE>
-dotnet run -- format-cells -p data. xlsx -s "Sheet1" -r A1:D1 --bold --background-color FF0000
-dotnet run -- format-cells --path data.xlsx --sheet "Data" --range A1:Z1 --font-size 14 --border
+excel-cli format-cells --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --style <STYLE>
+excel-cli format-cells -p data. xlsx -s "Sheet1" -r A1:D1 --bold --background-color FF0000
+excel-cli format-cells --path data.xlsx --sheet "Data" --range A1:Z1 --font-size 14 --border
 ```
 
 ### find-value
 Search for a specific value in a worksheet.
 
 ```bash
-dotnet run -- find-value --path <FILE_PATH> --sheet <SHEET_NAME> --value <VALUE>
-dotnet run -- find-value -p data.xlsx -s "Sheet1" -v "Total"
-dotnet run -- find-value --path data.xlsx --sheet "Data" --value 42 --all
+excel-cli find-value --path <FILE_PATH> --sheet <SHEET_NAME> --value <VALUE>
+excel-cli find-value -p data.xlsx -s "Sheet1" -v "Total"
+excel-cli find-value --path data.xlsx --sheet "Data" --value 42 --all
 ```
 
 ### export-sheet
 Export a worksheet to CSV or JSON format.
 
 ```bash
-dotnet run -- export-sheet --path <FILE_PATH> --sheet <SHEET_NAME> --output <OUTPUT_FILE> --format <FORMAT>
-dotnet run -- export-sheet -p data.xlsx -s "Sheet1" -o output.csv -f csv
-dotnet run -- export-sheet --path data.xlsx --sheet "Data" --output data.json --format json
+excel-cli export-sheet --path <FILE_PATH> --sheet <SHEET_NAME> --output <OUTPUT_FILE> --format <FORMAT>
+excel-cli export-sheet -p data.xlsx -s "Sheet1" -o output.csv -f csv
+excel-cli export-sheet --path data.xlsx --sheet "Data" --output data.json --format json
 ```
 
 ### import-data
 Import data from CSV or JSON into a worksheet.
 
 ```bash
-dotnet run -- import-data --path <FILE_PATH> --sheet <SHEET_NAME> --input <INPUT_FILE> --start-cell <CELL>
-dotnet run -- import-data -p data.xlsx -s "Sheet1" -i input.csv -c A1
-dotnet run -- import-data --path data.xlsx --sheet "Data" --input data.json --start-cell B2
+excel-cli import-data --path <FILE_PATH> --sheet <SHEET_NAME> --input <INPUT_FILE> --start-cell <CELL>
+excel-cli import-data -p data.xlsx -s "Sheet1" -i input.csv -c A1
+excel-cli import-data --path data.xlsx --sheet "Data" --input data.json --start-cell B2
 ```
 
 ### create-table
 Create a formatted Excel table from a range. 
 
 ```bash
-dotnet run -- create-table --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --table-name <NAME>
-dotnet run -- create-table -p data.xlsx -s "Sheet1" -r A1:D10 -t "DataTable"
-dotnet run -- create-table --path data.xlsx --sheet "Data" --range A1:Z100 --table-name "SalesData" --style medium
+excel-cli create-table --path <FILE_PATH> --sheet <SHEET_NAME> --range <RANGE> --table-name <NAME>
+excel-cli create-table -p data.xlsx -s "Sheet1" -r A1:D10 -t "DataTable"
+excel-cli create-table --path data.xlsx --sheet "Data" --range A1:Z100 --table-name "SalesData" --style medium
 ```
 
 ### insert-formula
 Insert a formula into a cell or range.
 
 ```bash
-dotnet run -- insert-formula --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL> --formula <FORMULA>
-dotnet run -- insert-formula -p data.xlsx -s "Sheet1" -c C1 -f "=SUM(A1:B1)"
-dotnet run -- insert-formula --path data.xlsx --sheet "Data" --cell D10 --formula "=AVERAGE(D1:D9)"
+excel-cli insert-formula --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL> --formula <FORMULA>
+excel-cli insert-formula -p data.xlsx -s "Sheet1" -c C1 -f "=SUM(A1:B1)"
+excel-cli insert-formula --path data.xlsx --sheet "Data" --cell D10 --formula "=AVERAGE(D1:D9)"
 ```
 
 ## ClosedXML Best Practices
