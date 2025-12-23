@@ -167,18 +167,18 @@ public class FormulaTests : ExcelTestBase
     }
 
     [Fact]
-    public async Task ReadCellAsync_WithFormula_ReturnsCalculatedValue()
+    public async Task ReadCellAsync_WithFormula_ReturnsFormula()
     {
         var service = CreateService();
         var filePath = CreateTestExcelFileWithFormulas("read_formula_value.xlsx", "Sheet1");
         RefreshMockFile(filePath);
 
-        // Use the service to read the cell - should return calculated value
+        // Use the service to read the cell - should return formula, not calculated value
         var result = await service.ReadCellAsync(filePath, "Sheet1", "C1");
 
         // C1 has formula =A1+B1 where A1=10 and B1=5
-        // GetValue<string>() should return "15"
-        Assert.Equal("15", result);
+        // ReadCellAsync should now return the formula "=A1+B1"
+        Assert.Equal("=A1+B1", result);
     }
 
     [Fact]

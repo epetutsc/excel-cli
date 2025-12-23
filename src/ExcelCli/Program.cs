@@ -27,6 +27,7 @@ try
     rootCommand.AddCommand(new ReadFileCommand(excelService, Log.Logger));
     rootCommand.AddCommand(new ListSheetsCommand(excelService, Log.Logger));
     rootCommand.AddCommand(new ReadCellCommand(excelService, Log.Logger));
+    rootCommand.AddCommand(new GetCellValueCommand(excelService, Log.Logger));
     rootCommand.AddCommand(new ReadRangeCommand(excelService, Log.Logger));
     rootCommand.AddCommand(new WriteCellCommand(excelService, Log.Logger));
     rootCommand.AddCommand(new CreateSheetCommand(excelService, Log.Logger));

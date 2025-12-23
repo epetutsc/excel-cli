@@ -6,18 +6,17 @@ using Serilog;
 namespace ExcelCli.Commands;
 
 /// <summary>
-/// Read cell command
+/// Get cell value command - returns the evaluated value from a cell (calculated result if it contains a formula)
 /// </summary>
-public class ReadCellCommand : Command
+public class GetCellValueCommand : Command
 {
-    public ReadCellCommand(IExcelService excelService, ILogger logger) : base("read-cell", 
-        "Read and display the content of a specific cell from a worksheet. " +
-        "If the cell contains a formula, this command returns the formula itself (e.g., '=SUM(A1:B1)'), NOT the calculated value. " +
-        "If the cell contains a plain value, that value is returned. " +
-        "To get the evaluated/calculated result of a formula, use the 'get-cell-value' command instead. " +
+    public GetCellValueCommand(IExcelService excelService, ILogger logger) : base("get-cell-value", 
+        "Get the evaluated value from a cell. " +
+        "If the cell contains a formula, this command returns the calculated result, NOT the formula itself. " +
+        "For example, if cell A1 contains '=SUM(B1:B5)', this returns the sum value like '150', not the formula text. " +
         "Cell addresses use Excel's A1 notation where letters represent columns (A, B, C, ..., Z, AA, AB, ...) and numbers represent rows (1, 2, 3, ...). " +
         "This is a read-only operation that does not modify the file. " +
-        "Examples: excel-cli read-cell --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli read-cell -p data.xlsx -s Data -c B5")
+        "Examples: excel-cli get-cell-value --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli get-cell-value -p data.xlsx -s Data -c C5")
     {
         var pathOption = new Option<string>(
             name: "--path",
@@ -49,12 +48,12 @@ public class ReadCellCommand : Command
             
             try
             {
-                var value = await excelService.ReadCellAsync(path, sheet, cell);
+                var value = await excelService.GetCellValueAsync(path, sheet, cell);
                 Console.WriteLine($"{cell}: {value}");
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error reading cell");
+                logger.Error(ex, "Error getting cell value");
                 Console.Error.WriteLine($"Error: {ex.Message}");
                 context.ExitCode = 1;
             }

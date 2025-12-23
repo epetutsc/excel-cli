@@ -83,4 +83,60 @@ public class ReadCellTests : ExcelTestBase
 
         Assert.Equal("123", result);
     }
+
+    [Fact]
+    public async Task ReadCellAsync_WithFormulaCell_ReturnsFormula()
+    {
+        var service = CreateService();
+        var filePath = CreateTestExcelFileWithFormulas("read_formula_cell.xlsx", "Sheet1");
+        RefreshMockFile(filePath);
+
+        // C1 has formula =A1+B1
+        var result = await service.ReadCellAsync(filePath, "Sheet1", "C1");
+
+        // Should return the formula, not the calculated value
+        Assert.Equal("=A1+B1", result);
+    }
+
+    [Fact]
+    public async Task ReadCellAsync_WithSumFormula_ReturnsFormula()
+    {
+        var service = CreateService();
+        var filePath = CreateTestExcelFileWithFormulas("read_sum_formula.xlsx", "Sheet1");
+        RefreshMockFile(filePath);
+
+        // C3 has formula =SUM(A1:A3)
+        var result = await service.ReadCellAsync(filePath, "Sheet1", "C3");
+
+        // Should return the formula
+        Assert.Equal("=SUM(A1:A3)", result);
+    }
+
+    [Fact]
+    public async Task ReadCellAsync_WithMultiplicationFormula_ReturnsFormula()
+    {
+        var service = CreateService();
+        var filePath = CreateTestExcelFileWithFormulas("read_multiply_formula.xlsx", "Sheet1");
+        RefreshMockFile(filePath);
+
+        // C2 has formula =A2*B2
+        var result = await service.ReadCellAsync(filePath, "Sheet1", "C2");
+
+        // Should return the formula
+        Assert.Equal("=A2*B2", result);
+    }
+
+    [Fact]
+    public async Task ReadCellAsync_WithValueCell_ReturnsValue()
+    {
+        var service = CreateService();
+        var filePath = CreateTestExcelFileWithFormulas("read_value_cell.xlsx", "Sheet1");
+        RefreshMockFile(filePath);
+
+        // A1 is a regular value cell (10), not a formula
+        var result = await service.ReadCellAsync(filePath, "Sheet1", "A1");
+
+        // Should return the value, not a formula
+        Assert.Equal("10", result);
+    }
 }
