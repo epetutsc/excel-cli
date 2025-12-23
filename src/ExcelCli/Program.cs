@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.IO.Abstractions;
 using ExcelCli.Commands;
 using ExcelCli.Services;
 using Serilog;
@@ -11,7 +12,8 @@ Log.Logger = new LoggerConfiguration()
 try
 {
     // Create services
-    var excelService = new ExcelService(Log.Logger);
+    var fileSystem = new FileSystem();
+    var excelService = new ExcelService(Log.Logger, fileSystem);
 
     // Create root command
     var rootCommand = new RootCommand("Excel CLI - Tool for reading and modifying Excel files");

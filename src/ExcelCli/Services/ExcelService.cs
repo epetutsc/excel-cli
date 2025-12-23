@@ -1,5 +1,6 @@
 using ClosedXML.Excel;
 using Serilog;
+using System.IO.Abstractions;
 using System.Text.Json;
 
 namespace ExcelCli.Services;
@@ -10,10 +11,12 @@ namespace ExcelCli.Services;
 public class ExcelService : IExcelService
 {
     private readonly ILogger _logger;
+    private readonly IFileSystem _fileSystem;
 
-    public ExcelService(ILogger logger)
+    public ExcelService(ILogger logger, IFileSystem fileSystem)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
     }
 
     public async Task<FileInfo> ReadFileInfoAsync(string filePath)
@@ -21,7 +24,7 @@ public class ExcelService : IExcelService
         ValidateFilePath(filePath);
         _logger.Information("Reading file info for {FilePath}", filePath);
 
-        var fileInfo = new System.IO.FileInfo(filePath);
+        var fileInfo = _fileSystem.FileInfo.New(filePath);
         using var workbook = new XLWorkbook(filePath);
         
         return await Task.FromResult(new FileInfo(
@@ -175,7 +178,7 @@ public class ExcelService : IExcelService
         var sourceWorksheet = GetWorksheet(sourceWorkbook, sheetName);
         
         XLWorkbook targetWorkbook;
-        var targetExists = File.Exists(targetFile);
+        var targetExists = _fileSystem.File.Exists(targetFile);
         
         if (targetExists)
         {
@@ -266,7 +269,7 @@ public class ExcelService : IExcelService
     {
         ValidateFilePath(filePath);
         
-        if (!File.Exists(inputFile))
+        if (!_fileSystem.File.Exists(inputFile))
         {
             throw new FileNotFoundException($"Input file not found: {inputFile}");
         }
@@ -311,14 +314,14 @@ public class ExcelService : IExcelService
         await Task.CompletedTask;
     }
 
-    private static void ValidateFilePath(string filePath)
+    private void ValidateFilePath(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))
         {
             throw new ArgumentException("File path cannot be empty.", nameof(filePath));
         }
         
-        if (!File.Exists(filePath))
+        if (!_fileSystem.File.Exists(filePath))
         {
             throw new FileNotFoundException($"File not found: {filePath}");
         }
@@ -334,7 +337,7 @@ public class ExcelService : IExcelService
         return worksheet;
     }
 
-    private static async Task ExportToCsvAsync(IXLRange range, string outputFile)
+    private async Task ExportToCsvAsync(IXLRange range, string outputFile)
     {
         var lines = new List<string>();
         
@@ -344,7 +347,7 @@ public class ExcelService : IExcelService
             lines.Add(string.Join(",", values));
         }
         
-        await File.WriteAllLinesAsync(outputFile, lines);
+        await _fileSystem.File.WriteAllLinesAsync(outputFile, lines);
     }
 
     private static string EscapeCsvValue(string value)
@@ -356,7 +359,7 @@ public class ExcelService : IExcelService
         return value;
     }
 
-    private static async Task ExportToJsonAsync(IXLRange range, string outputFile)
+    private async Task ExportToJsonAsync(IXLRange range, string outputFile)
     {
         var data = new List<Dictionary<string, string>>();
         var headers = range.FirstRow().Cells().Select(c => c.GetValue<string>()).ToArray();
@@ -375,12 +378,12 @@ public class ExcelService : IExcelService
         }
         
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(outputFile, json);
+        await _fileSystem.File.WriteAllTextAsync(outputFile, json);
     }
 
-    private static async Task ImportFromCsvAsync(IXLWorksheet worksheet, string inputFile, string startCell)
+    private async Task ImportFromCsvAsync(IXLWorksheet worksheet, string inputFile, string startCell)
     {
-        var lines = await File.ReadAllLinesAsync(inputFile);
+        var lines = await _fileSystem.File.ReadAllLinesAsync(inputFile);
         var cell = worksheet.Cell(startCell);
         var startRow = cell.Address.RowNumber;
         var startCol = cell.Address.ColumnNumber;
@@ -438,9 +441,9 @@ public class ExcelService : IExcelService
         return values.ToArray();
     }
 
-    private static async Task ImportFromJsonAsync(IXLWorksheet worksheet, string inputFile, string startCell)
+    private async Task ImportFromJsonAsync(IXLWorksheet worksheet, string inputFile, string startCell)
     {
-        var json = await File.ReadAllTextAsync(inputFile);
+        var json = await _fileSystem.File.ReadAllTextAsync(inputFile);
         var data = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
         
         if (data == null || data.Count == 0)
