@@ -16,7 +16,12 @@ try
     var excelService = new ExcelService(Log.Logger, fileSystem);
 
     // Create root command
-    var rootCommand = new RootCommand("Excel CLI - Tool for reading and modifying Excel files");
+    var rootCommand = new RootCommand(
+        "Excel CLI - A command-line tool for reading and modifying Excel files (.xlsx format). " +
+        "Supports reading file information, managing worksheets, reading/writing cells and ranges, " +
+        "searching for values, importing/exporting data (CSV/JSON), and inserting formulas. " +
+        "All file paths can be absolute or relative. Excel files must be in .xlsx format (ClosedXML library). " +
+        "Use 'excel-cli <command> --help' for detailed information about each command.");
 
     // Add all commands
     rootCommand.AddCommand(new ReadFileCommand(excelService, Log.Logger));

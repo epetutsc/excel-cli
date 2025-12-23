@@ -10,29 +10,34 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class ReadRangeCommand : Command
 {
-    public ReadRangeCommand(IExcelService excelService, ILogger logger) : base("read-range", "Read a range of cells from a worksheet")
+    public ReadRangeCommand(IExcelService excelService, ILogger logger) : base("read-range", 
+        "Read and display a range of cells from a worksheet. " +
+        "Ranges use Excel's A1 notation with a colon separator (e.g., A1:D10 reads from cell A1 to D10). " +
+        "Output can be formatted as table (human-readable), CSV (comma-separated), or JSON (array of arrays). " +
+        "This is a read-only operation. " +
+        "Examples: excel-cli read-range -p data.xlsx -s Sheet1 -r A1:D10 | excel-cli read-range --path data.xlsx --sheet Data --range A1:Z100 --format csv")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute or relative. The file must exist.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 
         var sheetOption = new Option<string>(
             name: "--sheet",
-            description: "Sheet name");
+            description: "Name of the worksheet to read from. Sheet names are case-sensitive.");
         sheetOption.AddAlias("-s");
         sheetOption.IsRequired = true;
 
         var rangeOption = new Option<string>(
             name: "--range",
-            description: "Range (e.g., A1:D10)");
+            description: "Cell range in A1:B2 notation (e.g., A1:D10, B2:F20). Format is 'TopLeftCell:BottomRightCell'.");
         rangeOption.AddAlias("-r");
         rangeOption.IsRequired = true;
 
         var formatOption = new Option<string>(
             name: "--format",
-            description: "Output format (table, csv, json)",
+            description: "Output format: 'table' (pipe-separated, human-readable), 'csv' (comma-separated values), or 'json' (JSON array). Default: table",
             getDefaultValue: () => "table");
         formatOption.AddAlias("-f");
 

@@ -10,29 +10,34 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class FindValueCommand : Command
 {
-    public FindValueCommand(IExcelService excelService, ILogger logger) : base("find-value", "Search for a specific value in a worksheet")
+    public FindValueCommand(IExcelService excelService, ILogger logger) : base("find-value", 
+        "Search for a specific value in a worksheet and return matching cell addresses. " +
+        "By default, returns only the first match. Use --all flag to find all occurrences. " +
+        "Search is performed across all cells in the worksheet. This is a read-only operation. " +
+        "Returns cell addresses in A1 notation along with the cell values. " +
+        "Examples: excel-cli find-value -p data.xlsx -s Sheet1 -v Total | excel-cli find-value --path data.xlsx --sheet Data --value 42 --all")
     {
         var pathOption = new Option<string>(
             name: "--path",
-            description: "Path to the Excel file");
+            description: "Path to the Excel file (.xlsx format). Can be absolute or relative. The file must exist.");
         pathOption.AddAlias("-p");
         pathOption.IsRequired = true;
 
         var sheetOption = new Option<string>(
             name: "--sheet",
-            description: "Sheet name");
+            description: "Name of the worksheet to search in. Sheet names are case-sensitive and must exist in the workbook.");
         sheetOption.AddAlias("-s");
         sheetOption.IsRequired = true;
 
         var valueOption = new Option<string>(
             name: "--value",
-            description: "Value to search for");
+            description: "Value to search for in the worksheet. Searches for exact matches in cell values.");
         valueOption.AddAlias("-v");
         valueOption.IsRequired = true;
 
         var allOption = new Option<bool>(
             name: "--all",
-            description: "Find all occurrences",
+            description: "Find all occurrences of the value. If false (default), returns only the first match. If true, returns all matches.",
             getDefaultValue: () => false);
         allOption.AddAlias("-a");
 

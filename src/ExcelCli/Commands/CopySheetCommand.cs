@@ -10,29 +10,35 @@ namespace ExcelCli.Commands;
 /// </summary>
 public class CopySheetCommand : Command
 {
-    public CopySheetCommand(IExcelService excelService, ILogger logger) : base("copy-sheet", "Copy a worksheet within the same file or to another file")
+    public CopySheetCommand(IExcelService excelService, ILogger logger) : base("copy-sheet", 
+        "Copy a worksheet from one Excel file to another, or within the same file. " +
+        "This command MODIFIES the target Excel file by adding a copy of the worksheet. " +
+        "The source file and sheet must exist. The target file must exist (or be created by the service). " +
+        "If --new-name is not provided, the original sheet name is used (must be unique in target). " +
+        "All cell values, formulas, and formatting are copied. " +
+        "Examples: excel-cli copy-sheet -s data.xlsx -sh Sheet1 -t backup.xlsx | excel-cli copy-sheet --source data.xlsx --sheet Template --target report.xlsx --new-name January")
     {
         var sourceOption = new Option<string>(
             name: "--source",
-            description: "Source Excel file");
+            description: "Path to the source Excel file (.xlsx format) containing the worksheet to copy. Can be absolute or relative. Must exist.");
         sourceOption.AddAlias("-s");
         sourceOption.IsRequired = true;
 
         var sheetOption = new Option<string>(
             name: "--sheet",
-            description: "Sheet name to copy");
+            description: "Name of the worksheet to copy from the source file. Must exist in source file. Case-sensitive.");
         sheetOption.AddAlias("-sh");
         sheetOption.IsRequired = true;
 
         var targetOption = new Option<string>(
             name: "--target",
-            description: "Target Excel file");
+            description: "Path to the target Excel file (.xlsx format) where the worksheet will be copied. Can be the same as source for in-file copy.");
         targetOption.AddAlias("-t");
         targetOption.IsRequired = true;
 
         var newNameOption = new Option<string?>(
             name: "--new-name",
-            description: "New sheet name (optional)");
+            description: "Optional: New name for the copied worksheet in the target file. If not specified, uses the original sheet name. Must be unique in target.");
         newNameOption.AddAlias("-n");
 
         AddOption(sourceOption);
