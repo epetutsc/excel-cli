@@ -401,6 +401,7 @@ public class ExcelService : IExcelService
         var currentValue = new System.Text.StringBuilder();
         var inQuotes = false;
         
+#pragma warning disable S127 // Loop counter update is intentional for CSV parsing efficiency
         for (int i = 0; i < line.Length;)
         {
             var c = line[i];
@@ -409,7 +410,7 @@ public class ExcelService : IExcelService
             {
                 if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
                 {
-                    // S127: Handle escaped quotes without updating loop counter
+                    // Handle escaped quotes
                     currentValue.Append('"');
                     i += 2; // Skip both quotes
                 }
@@ -431,6 +432,7 @@ public class ExcelService : IExcelService
                 i++;
             }
         }
+#pragma warning restore S127
         
         values.Add(currentValue.ToString());
         return values.ToArray();

@@ -33,7 +33,9 @@ public interface IExcelService
     /// <summary>
     /// Write data to a range of cells
     /// </summary>
+#pragma warning disable S2368 // Public methods should not have multidimensional array parameters - Required for Excel range data
     Task WriteRangeAsync(string filePath, string sheetName, string range, string[][] data);
+#pragma warning restore S2368
 
     /// <summary>
     /// Create a new worksheet
@@ -76,17 +78,3 @@ public interface IExcelService
     Task InsertFormulaAsync(string filePath, string sheetName, string cellAddress, string formula);
 }
 
-/// <summary>
-/// Information about an Excel file
-/// </summary>
-public record FileInfo(string FileName, long FileSize, DateTime LastModified, int SheetCount);
-
-/// <summary>
-/// Information about a worksheet
-/// </summary>
-public record SheetInfo(string Name, int RowCount, int ColumnCount);
-
-/// <summary>
-/// Location of a cell
-/// </summary>
-public record CellLocation(string SheetName, string CellAddress, string Value);
