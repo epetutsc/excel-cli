@@ -17,18 +17,51 @@ A powerful command-line tool for reading and modifying Excel files using ClosedX
 
 ## Installation
 
+### Global Tool Installation
+
+Install the tool globally to use it from anywhere:
+
+```bash
+dotnet tool install --global ExcelCli
+```
+
+### Local Tool Installation
+
+For project-specific installation, first create a tool manifest if you don't have one:
+
+```bash
+dotnet new tool-manifest
+```
+
+Then install the tool locally:
+
+```bash
+dotnet tool install ExcelCli
+```
+
+And run it using:
+
+```bash
+dotnet excel-cli <command> [options]
+```
+
+### Installing from Source
+
+If you want to install from source:
+
 ```bash
 git clone https://github.com/epetutsc/excel-cli.git
 cd excel-cli
-dotnet build
+dotnet pack src/ExcelCli/ExcelCli.csproj
+dotnet tool install --global --add-source ./nupkg ExcelCli
 ```
 
 ## Usage
 
-Run commands with:
+Once installed as a global tool, run commands with:
 
 ```bash
-dotnet run --project src/ExcelCli/ExcelCli.csproj -- <command> [options]
+excel-cli <command> [options]
 ```
 
 ### Available Commands
@@ -37,79 +70,79 @@ dotnet run --project src/ExcelCli/ExcelCli.csproj -- <command> [options]
 
 **read-file** - Display file information and sheet summary
 ```bash
-dotnet run -- read-file --path data.xlsx
+excel-cli read-file --path data.xlsx
 ```
 
 **list-sheets** - List all worksheets
 ```bash
-dotnet run -- list-sheets --path data.xlsx
+excel-cli list-sheets --path data.xlsx
 ```
 
 **read-cell** - Read a specific cell value
 ```bash
-dotnet run -- read-cell --path data.xlsx --sheet "Sheet1" --cell A1
+excel-cli read-cell --path data.xlsx --sheet "Sheet1" --cell A1
 ```
 
 **read-range** - Read a range of cells
 ```bash
-dotnet run -- read-range --path data.xlsx --sheet "Sheet1" --range A1:D10
-dotnet run -- read-range --path data.xlsx --sheet "Sheet1" --range A1:D10 --format csv
-dotnet run -- read-range --path data.xlsx --sheet "Sheet1" --range A1:D10 --format json
+excel-cli read-range --path data.xlsx --sheet "Sheet1" --range A1:D10
+excel-cli read-range --path data.xlsx --sheet "Sheet1" --range A1:D10 --format csv
+excel-cli read-range --path data.xlsx --sheet "Sheet1" --range A1:D10 --format json
 ```
 
 #### Write Operations
 
 **write-cell** - Write a value to a cell
 ```bash
-dotnet run -- write-cell --path data.xlsx --sheet "Sheet1" --cell A1 --value "Hello"
+excel-cli write-cell --path data.xlsx --sheet "Sheet1" --cell A1 --value "Hello"
 ```
 
 **insert-formula** - Insert an Excel formula
 ```bash
-dotnet run -- insert-formula --path data.xlsx --sheet "Sheet1" --cell C1 --formula "=SUM(A1:B1)"
+excel-cli insert-formula --path data.xlsx --sheet "Sheet1" --cell C1 --formula "=SUM(A1:B1)"
 ```
 
 #### Sheet Management
 
 **create-sheet** - Create a new worksheet
 ```bash
-dotnet run -- create-sheet --path data.xlsx --name "NewSheet"
+excel-cli create-sheet --path data.xlsx --name "NewSheet"
 ```
 
 **delete-sheet** - Delete a worksheet
 ```bash
-dotnet run -- delete-sheet --path data.xlsx --name "OldSheet"
+excel-cli delete-sheet --path data.xlsx --name "OldSheet"
 ```
 
 **rename-sheet** - Rename a worksheet
 ```bash
-dotnet run -- rename-sheet --path data.xlsx --old-name "Sheet1" --new-name "Data2025"
+excel-cli rename-sheet --path data.xlsx --old-name "Sheet1" --new-name "Data2025"
 ```
 
 **copy-sheet** - Copy a worksheet
 ```bash
-dotnet run -- copy-sheet --source data.xlsx --sheet "Sheet1" --target backup.xlsx
-dotnet run -- copy-sheet --source data.xlsx --sheet "Template" --target report.xlsx --new-name "January"
+excel-cli copy-sheet --source data.xlsx --sheet "Sheet1" --target backup.xlsx
+excel-cli copy-sheet --source data.xlsx --sheet "Template" --target report.xlsx --new-name "January"
 ```
 
 #### Search and Export
 
 **find-value** - Search for a value in a worksheet
 ```bash
-dotnet run -- find-value --path data.xlsx --sheet "Sheet1" --value "Total"
-dotnet run -- find-value --path data.xlsx --sheet "Sheet1" --value "Total" --all
+excel-cli find-value --path data.xlsx --sheet "Sheet1" --value "Total"
+excel-cli find-value --path data.xlsx --sheet "Sheet1" --value "Total" --all
 ```
 
 **export-sheet** - Export worksheet to CSV or JSON
 ```bash
-dotnet run -- export-sheet --path data.xlsx --sheet "Sheet1" --output output.csv --format csv
-dotnet run -- export-sheet --path data.xlsx --sheet "Data" --output data.json --format json
+excel-cli export-sheet --path data.xlsx --sheet "Sheet1" --output output.csv --format csv
+excel-cli export-sheet --path data.xlsx --sheet "Data" --output data.json --format json
 ```
 
 **import-data** - Import data from CSV or JSON
 ```bash
-dotnet run -- import-data --path data.xlsx --sheet "Sheet1" --input input.csv --start-cell A1
-dotnet run -- import-data --path data.xlsx --sheet "Data" --input data.json --start-cell B2
+excel-cli import-data --path data.xlsx --sheet "Sheet1" --input input.csv --start-cell A1
+excel-cli import-data --path data.xlsx --sheet "Data" --input data.json --start-cell B2
 ```
 
 ## Development
@@ -136,7 +169,43 @@ excel-cli/
 dotnet build
 ```
 
-### Testing
+### Packing as Tool
+
+To create a NuGet package:
+
+```bash
+dotnet pack src/ExcelCli/ExcelCli.csproj
+```
+
+The package will be created in the `nupkg` directory.
+
+### Testing During Development
+
+For development and testing, you can run the tool without installing it:
+
+```bash
+dotnet run --project src/ExcelCli/ExcelCli.csproj -- <command> [options]
+```
+
+Or install it locally from the packed version:
+
+```bash
+dotnet tool install --global --add-source ./nupkg ExcelCli
+```
+
+To update an existing installation:
+
+```bash
+dotnet tool update --global --add-source ./nupkg ExcelCli
+```
+
+To uninstall:
+
+```bash
+dotnet tool uninstall --global ExcelCli
+```
+
+### Running Tests
 
 ```bash
 dotnet test
