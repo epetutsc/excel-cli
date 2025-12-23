@@ -6,17 +6,17 @@ using Serilog;
 namespace ExcelCli.Commands;
 
 /// <summary>
-/// Get cell value command - returns the evaluated value from a cell (calculated result if it contains a formula)
+/// Read cell value command - returns the evaluated value from a cell (calculated result if it contains a formula)
 /// </summary>
-public class GetCellValueCommand : Command
+public class ReadCellValueCommand : Command
 {
-    public GetCellValueCommand(IExcelService excelService, ILogger logger) : base("get-cell-value", 
-        "Get the evaluated value from a cell. " +
+    public ReadCellValueCommand(IExcelService excelService, ILogger logger) : base("read-cell-value", 
+        "Read the evaluated value from a cell. " +
         "If the cell contains a formula, this command returns the calculated result, NOT the formula itself. " +
         "For example, if cell A1 contains '=SUM(B1:B5)', this returns the sum value like '150', not the formula text. " +
         "Cell addresses use Excel's A1 notation where letters represent columns (A, B, C, ..., Z, AA, AB, ...) and numbers represent rows (1, 2, 3, ...). " +
         "This is a read-only operation that does not modify the file. " +
-        "Examples: excel-cli get-cell-value --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli get-cell-value -p data.xlsx -s Data -c C5")
+        "Examples: excel-cli read-cell-value --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli read-cell-value -p data.xlsx -s Data -c C5")
     {
         var pathOption = new Option<string>(
             name: "--path",
@@ -53,7 +53,7 @@ public class GetCellValueCommand : Command
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error getting cell value");
+                logger.Error(ex, "Error reading cell value");
                 Console.Error.WriteLine($"Error: {ex.Message}");
                 context.ExitCode = 1;
             }

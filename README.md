@@ -85,9 +85,9 @@ excel-cli read-cell --path data.xlsx --sheet "Sheet1" --cell A1
 # If cell A1 contains "Hello", this returns "Hello"
 ```
 
-**get-cell-value** - Get the evaluated value from a cell (calculated result for formulas)
+**read-cell-value** - Read the evaluated value from a cell (calculated result for formulas)
 ```bash
-excel-cli get-cell-value --path data.xlsx --sheet "Sheet1" --cell A1
+excel-cli read-cell-value --path data.xlsx --sheet "Sheet1" --cell A1
 # If cell A1 contains "=SUM(B1:B5)", this returns the calculated sum (e.g., "150")
 # If cell A1 contains "Hello", this returns "Hello"
 ```

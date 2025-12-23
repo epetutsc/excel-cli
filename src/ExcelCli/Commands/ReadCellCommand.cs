@@ -14,7 +14,7 @@ public class ReadCellCommand : Command
         "Read and display the content of a specific cell from a worksheet. " +
         "If the cell contains a formula, this command returns the formula itself (e.g., '=SUM(A1:B1)'), NOT the calculated value. " +
         "If the cell contains a plain value, that value is returned. " +
-        "To get the evaluated/calculated result of a formula, use the 'get-cell-value' command instead. " +
+        "To get the evaluated/calculated result of a formula, use the 'read-cell-value' command instead. " +
         "Cell addresses use Excel's A1 notation where letters represent columns (A, B, C, ..., Z, AA, AB, ...) and numbers represent rows (1, 2, 3, ...). " +
         "This is a read-only operation that does not modify the file. " +
         "Examples: excel-cli read-cell --path data.xlsx --sheet Sheet1 --cell A1 | excel-cli read-cell -p data.xlsx -s Data -c B5")

@@ -5,7 +5,7 @@ namespace ExcelCli.Tests;
 /// <summary>
 /// Tests for GetCellValueAsync operation
 /// </summary>
-public class GetCellValueTests : ExcelTestBase
+public class ReadCellValueTests : ExcelTestBase
 {
     [Fact]
     public async Task GetCellValueAsync_WithNullPath_ThrowsArgumentException()

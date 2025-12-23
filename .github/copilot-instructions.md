@@ -95,13 +95,13 @@ excel-cli read-cell -p data.xlsx -s "Sheet1" -c A1
 excel-cli read-cell --path data.xlsx --sheet "Data" --cell B5
 ```
 
-### get-cell-value
-Get the evaluated value from a cell. If the cell contains a formula, returns the calculated result, NOT the formula. This is useful when you need the actual computed value.
+### read-cell-value
+Read the evaluated value from a cell. If the cell contains a formula, returns the calculated result, NOT the formula. This is useful when you need the actual computed value.
 
 ```bash
-excel-cli get-cell-value --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
-excel-cli get-cell-value -p data.xlsx -s "Sheet1" -c C1
-excel-cli get-cell-value --path data.xlsx --sheet "Data" --cell D5
+excel-cli read-cell-value --path <FILE_PATH> --sheet <SHEET_NAME> --cell <CELL_ADDRESS>
+excel-cli read-cell-value -p data.xlsx -s "Sheet1" -c C1
+excel-cli read-cell-value --path data.xlsx --sheet "Data" --cell D5
 ```
 
 ### read-range
